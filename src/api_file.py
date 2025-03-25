@@ -14,7 +14,7 @@ class HH:
         self.employers = [9694561, 78638, 11826459, 5919632, 6062708, 5667343, 9301808, 774144, 10571093, 238614]
 
     def get_employers(self):
-        """загрузка работодателей"""
+        """загрузка списка работодателей"""
         employers_info = []
         for employer_id in self.employers:
             temp_url = f"{self.__url}employers/{employer_id}"
