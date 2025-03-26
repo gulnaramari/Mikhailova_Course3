@@ -1,17 +1,18 @@
 from src.api_file import HH
-from src.config import get_dict
+from src.config import config
 from src.file_DBmanager import DBManager
-from src.work_database import create_database, save_data_to_database
-from src.hh_api import get_vacancies, get_companies, get_vacancy_list
+from src.create_database import create_database, save_data_to_database
+
+
 
 def main():
     """Функция для работы прогрммы"""
-    params = get_dict()
+    params = config()
 
     data_employer = HH().get_employers()
     data_vacancies = HH().load_vacancies()
-    create_database('head_hunter', params)
-    save_data_to_database(data_employer, data_vacancies, 'head_hunter', params)
+    create_database('Course3_hh', params)
+    save_data_to_database(data_employer, data_vacancies, 'Course3_hh', params)
     db_manager = DBManager(params)
 
     print("""
@@ -27,13 +28,13 @@ def main():
     while True:
         user_input = input()
         if user_input == "1":
-            companies_and_vacancies_count = db_manager.companies_and_vacancies()
+            companies_and_vacancies_count = db_manager.get_companies_and_vacancies_count()
             print("Cписок всех компаний и количество вакансий у каждой компаний:")
             for i in companies_and_vacancies_count:
                 print(i)
             print("Введите цифру для получения нужной Вам информации")
         elif user_input == "2":
-            all_vacancies = db_manager.all_vacancies()
+            all_vacancies = db_manager.get_all_vacancies()
             print("""
             список всех вакансий с указанием названия компании, названия вакансии и зарплаты и ссылки на вакансию:
             """)
@@ -46,15 +47,15 @@ def main():
             print(avg_salary)
             print("Введите цифру для получения нужной Вам информации")
         elif user_input == "4":
-            vacancies_with_higher_salary = db_manager.vacancies_high_salary()
+            vacancies_with_higher_salary = db_manager.get_vacancies_with_higher_salary()
             print("список всех вакансий, у которых зарплата выше средней по всем вакансиям:")
             for i in vacancies_with_higher_salary:
                 print(i)
             print("Введите цифру для получения нужной Вам информации")
         elif user_input == "5":
             user_word = input("Введите ключ слово\n").lower()
-            vacancies_on_query = db_manager.vacancies_on_query(user_word)
-            print("список всех вакансий, в названии которых содержатся переданные в метод слова:")
+            vacancies_on_query = db_manager.get_vacancies_with_keyword(user_word)
+            print("список всех вакансий, в названии которых ключевое слово:")
             for i in vacancies_on_query:
                 print(i)
             print("Введите цифру для получения нужной Вам информации")

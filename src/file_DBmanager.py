@@ -7,7 +7,7 @@ class DBManager:
     """Класс для работы с базой данных"""
 
     def __init__(self, params):
-        self.conn = psycopg2.connect(dbname='hh_db', **params)
+        self.conn = psycopg2.connect(dbname='hh', **params)
         self.cur = self.conn.cursor()
 
     def get_companies_and_vacancies_count(self):

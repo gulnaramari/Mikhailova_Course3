@@ -4,7 +4,7 @@ import psycopg2
 
 def create_database(database_name: str, params):
     """Создание базы данных и таблиц для сохранения данных о каналах и видео."""
-    conn = psycopg2.connect(dbname='postgres', **params)
+    conn = psycopg2.connect(dbname='Course3_hh', **params)
     conn.autocommit = True
     cur = conn.cursor()
 
