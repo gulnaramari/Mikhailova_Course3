@@ -2,7 +2,6 @@ from typing import Any
 import psycopg2
 
 
-
 def create_database(database_name: str, params):
     """Создание базы данных и таблиц для сохранения данных о каналах и видео."""
     conn = psycopg2.connect(dbname='postgres', **params)
