@@ -6,13 +6,13 @@ from src.create_database import create_database, save_data_to_database
 
 def main():
     """Функция для работы прогрммы"""
-    params = config()
+    params = config("src/config.ini")
 
     data_employer = HH().get_employers()
     data_vacancies = HH().load_vacancies()
-    create_database('Course3_hh', params)
-    save_data_to_database(data_employer, data_vacancies, 'Course3_hh', params)
-    db_manager = DBManager()
+    create_database('course3_hh', params)
+    save_data_to_database(data_employer, data_vacancies, 'course3_hh', params)
+    db_manager = DBManager(params)
 
     print("""
         Введите цифру для получения нужной Вам информации

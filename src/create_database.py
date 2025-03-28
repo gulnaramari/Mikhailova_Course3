@@ -4,7 +4,7 @@ import psycopg2
 
 def create_database(database_name: str, params):
     """Создание базы данных и таблиц для сохранения данных о каналах и видео."""
-    conn = psycopg2.connect(dbname='Course3_hh', **params)
+    conn = psycopg2.connect(dbname="postgres", **params)
     conn.autocommit = True
     cur = conn.cursor()
 
@@ -12,11 +12,12 @@ def create_database(database_name: str, params):
     cur.execute(f"CREATE DATABASE {database_name}")
 
     conn.close()
-
+    print(database_name, params)
     conn = psycopg2.connect(dbname=database_name, **params)
 
     with conn.cursor() as cur:
-        cur.execute("""
+        cur.execute(
+            """
             CREATE TABLE employers (
                 employer_id INTEGER PRIMARY KEY,
                 employer_name text not null,
@@ -24,10 +25,12 @@ def create_database(database_name: str, params):
                 url TEXT,
                 open_vacancies INTEGER
             )
-        """)
+        """
+        )
 
     with conn.cursor() as cur:
-        cur.execute("""
+        cur.execute(
+            """
             CREATE TABLE vacancies (
                 vacancy_id INTEGER,
                 vacancy_name VARCHAR,
@@ -36,35 +39,58 @@ def create_database(database_name: str, params):
                 employer_id INTEGER REFERENCES employers(employer_id),
                 vacancy_url VARCHAR
             )
-        """)
+        """
+        )
 
     conn.commit()
     conn.close()
 
 
-def save_data_to_database(employer: list[dict[str, Any]], vacancies: list[dict[str, Any]],
-                          database_name: str, params: dict):
+def save_data_to_database(
+    employer: list[dict[str, Any]],
+    vacancies: list[dict[str, Any]],
+    database_name: str,
+    params: dict,
+):
     """Сохранение данных о каналах и видео в базу данных."""
 
     conn = psycopg2.connect(dbname=database_name, **params)
 
     with conn.cursor() as cur:
         for emp in employer:
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT INTO employers (employer_id, employer_name, employer_area, url, open_vacancies)
                 VALUES (%s, %s, %s, %s, %s)
                 """,
-                        (emp['id'], emp['name'], emp['area']['name'], emp['alternate_url'],
-                         emp['open_vacancies']))
+                (
+                    emp["id"],
+                    emp["name"],
+                    emp["area"]["name"],
+                    emp["alternate_url"],
+                    emp["open_vacancies"],
+                ),
+            )
         for vacancy in vacancies:
-            salary_from = vacancy['salary']['from'] if vacancy['salary'] and vacancy['salary'][
-                'from'] is not None else 0
-            cur.execute("""
+            salary_from = (
+                vacancy["salary"]["from"]
+                if vacancy["salary"] and vacancy["salary"]["from"] is not None
+                else 0
+            )
+            cur.execute(
+                """
                     INSERT INTO vacancies (vacancy_id, vacancy_name, vacancy_area, salary, employer_id, vacancy_url)
                     VALUES (%s, %s, %s, %s, %s, %s)
                     """,
-                        (vacancy.get('id'), vacancy['name'], vacancy['area']['name'], salary_from,
-                         vacancy['employer']['id'], vacancy['alternate_url']))
+                (
+                    vacancy.get("id"),
+                    vacancy["name"],
+                    vacancy["area"]["name"],
+                    salary_from,
+                    vacancy["employer"]["id"],
+                    vacancy["alternate_url"],
+                ),
+            )
 
     conn.commit()
     conn.close()

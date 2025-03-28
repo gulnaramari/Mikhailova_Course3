@@ -1,4 +1,3 @@
-import logging
 from pprint import pprint
 import requests
 
@@ -6,12 +5,25 @@ import requests
 class HH:
     """Класс для работы с API HH"""
 
-    def __init__(self, ):
+    def __init__(
+        self,
+    ):
         """конструктор класса"""
-        self.__url = 'https://api.hh.ru/'
-        self._headers = {'User-Agent': 'HH-User-Agent'}
+        self.__url = "https://api.hh.ru/"
+        self._headers = {"User-Agent": "HH-User-Agent"}
         self._params = {"per_page": 100, "page": 0, "only_with_salary": True}
-        self.employers = [6062708, 78638, 10571093, 198614, 5667343, 901808, 774144, 9694561, 4219, 5919632]
+        self.employers = [
+            6062708,
+            78638,
+            10571093,
+            198614,
+            5667343,
+            901808,
+            774144,
+            9694561,
+            4219,
+            5919632,
+        ]
 
     def get_employers(self):
         """загрузка списка работодателей"""
@@ -33,8 +45,10 @@ class HH:
         for employer_id in self.employers:
             self._params["employer_id"] = employer_id
             vacancy_url = f"{self.__url}vacancies"
-            response = requests.get(vacancy_url, headers=self._headers, params=self._params)
-            vacancies = response.json()['items']
+            response = requests.get(
+                vacancy_url, headers=self._headers, params=self._params
+            )
+            vacancies = response.json()["items"]
             vacancy_info.extend(vacancies)
 
         return vacancy_info

@@ -13,10 +13,10 @@ def config(filename="config.ini", section="postgres"):
             db[param[0]] = param[1]
     else:
         raise Exception(
-            'Section {0} is not found in the {1} file'.format(section, filename)
+            "Section {0} is not found in the {1} file".format(section, filename)
         )
 
-    print(f"Database parameters: {db}")  # Вывод параметров базы данных
+    print(f"Database parameters: {db}")
     return db
 
 
