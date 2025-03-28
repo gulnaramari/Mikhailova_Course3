@@ -4,7 +4,6 @@ from src.file_DBmanager import DBManager
 from src.create_database import create_database, save_data_to_database
 
 
-
 def main():
     """Функция для работы прогрммы"""
     params = config()
@@ -13,7 +12,7 @@ def main():
     data_vacancies = HH().load_vacancies()
     create_database('Course3_hh', params)
     save_data_to_database(data_employer, data_vacancies, 'Course3_hh', params)
-    db_manager = DBManager(params)
+    db_manager = DBManager()
 
     print("""
         Введите цифру для получения нужной Вам информации
@@ -53,10 +52,10 @@ def main():
                 print(i)
             print("Введите цифру для получения нужной Вам информации")
         elif user_input == "5":
-            user_word = input("Введите ключ слово\n").lower()
-            vacancies_on_query = db_manager.get_vacancies_with_keyword(user_word)
-            print("список всех вакансий, в названии которых ключевое слово:")
-            for i in vacancies_on_query:
+            user_word = input("Введите ключевое слово\n").lower()
+            vacancies_with_keyword = db_manager.get_vacancies_with_keyword(user_word)
+            print("список всех вакансий, в названии которых содержатся переданные в метод слова:")
+            for i in vacancies_with_keyword:
                 print(i)
             print("Введите цифру для получения нужной Вам информации")
         elif user_input == "0":

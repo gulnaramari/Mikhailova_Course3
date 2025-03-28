@@ -1,3 +1,4 @@
+import logging
 from pprint import pprint
 import requests
 
@@ -5,7 +6,7 @@ import requests
 class HH:
     """Класс для работы с API HH"""
 
-    def __init__(self,):
+    def __init__(self, ):
         """конструктор класса"""
         self.__url = 'https://api.hh.ru/'
         self._headers = {'User-Agent': 'HH-User-Agent'}
@@ -26,7 +27,6 @@ class HH:
 
         return employers_info
 
-
     def load_vacancies(self):
         """загрузка вакансий"""
         vacancy_info = []
@@ -46,4 +46,3 @@ if __name__ == "__main__":
 
     pprint(data_employer)
     pprint(data_vacancies)
-

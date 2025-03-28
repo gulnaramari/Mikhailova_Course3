@@ -1,9 +1,10 @@
 from configparser import ConfigParser
 
 
-def config(filename="database.ini", section="postgres"):
-    """Функция для получения словаря с данными для подключения к БД"""
+def config(filename="config.ini", section="postgres"):
+    # create a parser
     parser = ConfigParser()
+    # read config file
     parser.read(filename)
     db = {}
     if parser.has_section(section):
@@ -12,5 +13,12 @@ def config(filename="database.ini", section="postgres"):
             db[param[0]] = param[1]
     else:
         raise Exception(
-            'Section {0} is not found in the {1} file.'.format(section, filename))
+            'Section {0} is not found in the {1} file'.format(section, filename)
+        )
+
+    print(f"Database parameters: {db}")  # Вывод параметров базы данных
     return db
+
+
+if __name__ == "__main__":
+    config()

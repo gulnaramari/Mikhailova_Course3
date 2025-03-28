@@ -1,15 +1,23 @@
+import pytest
 from unittest.mock import patch, MagicMock
 from src.file_DBmanager import DBManager
 
 
-@patch('src.get_DBManager.psycopg2.connect')
-def test_get_companies_and_vacancies_count(mock_connect, db_manager):
+@pytest.fixture
+def db_example():
+    """Фикстура для создания экземпляра DBManager."""
+    params = {'user': 'postgres', 'password': 'Mariam', 'host': 'localhost'}
+    return DBManager(params)
+
+
+@patch('src.file_DBmanager.psycopg2.connect')
+def test_get_companies_and_vacancies_count(mock_connect, db_example):
     # Настройка имитации курсора и результата
     mock_cursor = MagicMock()
     mock_connect.return_value.__enter__.return_value.cursor.return_value = mock_cursor
     mock_cursor.fetchall.return_value = [('Company A', 5), ('Company B', 3)]
 
-    result = db_manager.get_companies_and_vacancies_count()
+    result = db_example.get_companies_and_vacancies_count()
     for i in result:
         print(i)
     print(result)
@@ -23,8 +31,8 @@ def test_get_companies_and_vacancies_count(mock_connect, db_manager):
     """)
 
 
-@patch('src.get_DBManager.psycopg2.connect')
-def test_get_all_vacancies(mock_connect, db_manager):
+@patch('src.file_DBmanager.psycopg2.connect')
+def test_get_all_vacancies(mock_connect, db_example):
     mock_cursor = MagicMock()
     mock_connect.return_value.__enter__.return_value.cursor.return_value = mock_cursor
     mock_cursor.fetchall.return_value = [
@@ -32,7 +40,7 @@ def test_get_all_vacancies(mock_connect, db_manager):
         ('Company B', 'Vacancy B', 1500, 2500, 'http://example.com/vacancy_b'),
     ]
 
-    result = db_manager.get_all_vacancies()
+    result = db_example.get_all_vacancies()
 
     assert result == [
         ('Company A', 'Vacancy A', 1000, 2000, 'http://example.com/vacancy_a'),
@@ -48,13 +56,13 @@ def test_get_all_vacancies(mock_connect, db_manager):
     """)
 
 
-@patch('src.get_DBManager.psycopg2.connect')
-def test_get_avg_salary(mock_connect, db_manager):
+@patch('src.file_DBmanager.psycopg2.connect')
+def test_get_avg_salary(mock_connect, db_example):
     mock_cursor = MagicMock()
     mock_connect.return_value.__enter__.return_value.cursor.return_value = mock_cursor
     mock_cursor.fetchall.return_value = [('Company A', 1500), ('Company B', 2000)]
 
-    result = db_manager.get_avg_salary()
+    result = db_example.get_avg_salary()
 
     assert result == [('Company A', 1500), ('Company B', 2000)]
     mock_cursor.execute.assert_called_once_with("""
@@ -67,13 +75,13 @@ def test_get_avg_salary(mock_connect, db_manager):
     """)
 
 
-@patch('src.get_DBManager.psycopg2.connect')
-def test_get_vacancies_with_higher_salary(mock_connect, db_manager):
+@patch('src.file_DBmanager.psycopg2.connect')
+def test_get_vacancies_with_higher_salary(mock_connect, db_example):
     mock_cursor = MagicMock()
     mock_connect.return_value.__enter__.return_value.cursor.return_value = mock_cursor
     mock_cursor.fetchall.return_value = [('Vacancy A',), ('Vacancy B',)]
 
-    result = db_manager.get_vacancies_with_higher_salary()
+    result = db_example.get_vacancies_with_higher_salary()
 
     assert result == [('Vacancy A',), ('Vacancy B',)]
     mock_cursor.execute.assert_called_once_with("""
@@ -84,18 +92,17 @@ def test_get_vacancies_with_higher_salary(mock_connect, db_manager):
     """)
 
 
-@patch('src.get_DBManager.psycopg2.connect')
-def test_get_vacancies_with_keyword(mock_connect, db_manager):
+@patch('src.file_DBmanager.psycopg2.connect')
+def test_get_vacancies_with_keyword(mock_connect, db_example):
     keyword = 'developer'
     mock_cursor = MagicMock()
     mock_connect.return_value.__enter__.return_value.cursor.return_value = mock_cursor
     mock_cursor.fetchall.return_value = [('Developer Vacancy',)]
 
-    result = db_manager.get_vacancies_with_keyword(keyword)
+    result = db_example.get_vacancies_with_keyword(keyword)
 
     assert result == [('Developer Vacancy',)]
     mock_cursor.execute.assert_called_once_with(
         "SELECT * FROM vacancies"
         " WHERE vacancy_name ILIKE %s", ('%developer%',)
     )
-
