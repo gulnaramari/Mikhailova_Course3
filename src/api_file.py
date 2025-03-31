@@ -1,4 +1,6 @@
 from pprint import pprint
+from typing import Dict, List
+
 import requests
 
 
@@ -25,7 +27,7 @@ class HH:
             5919632,
         ]
 
-    def get_employers(self):
+    def get_employers(self) -> List[Dict]:
         """загрузка списка работодателей"""
         employers_info = []
         for employer_id in self.employers:
@@ -39,7 +41,7 @@ class HH:
 
         return employers_info
 
-    def load_vacancies(self):
+    def load_vacancies(self) -> List[Dict]:
         """загрузка вакансий"""
         vacancy_info = []
         for employer_id in self.employers:

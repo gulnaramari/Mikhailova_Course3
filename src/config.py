@@ -1,8 +1,9 @@
 from configparser import ConfigParser
+from typing import Dict
 
 
-def config(filename="config.ini", section="postgres"):
-    # create a parser
+def config(filename="config.ini", section="postgres") -> Dict:
+    """функция для чтения файла конфигурации"""
     parser = ConfigParser()
     # read config file
     parser.read(filename)
